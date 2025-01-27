@@ -6,6 +6,6 @@ RUN apk update && \
 
 COPY files/myAwesome.conf /etc/nginx/http.d/default.conf
 COPY files/index.html /usr/share/nginx/html/
-COPY files/eicar.txt /tmp/eicar.txt
+COPY files/eicar.* /tmp/
 
 CMD ["nginx", "-g", "daemon off;"]
