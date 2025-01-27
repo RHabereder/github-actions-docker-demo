@@ -1,0 +1,58 @@
+name: Github Action to build and push a docker image
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Gitleaks
+      uses: gitleaks/gitleaks-action@v2.3.4    
+    
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag rhabereders-awesomeimage:$(date +%s)
+
+    - name: Aqua Security Trivy
+      # You may pin to the exact commit or the version.
+      # uses: aquasecurity/trivy-action@18f2510ee396bbf400402947b394f2dd8c87dbb0
+      uses: aquasecurity/trivy-action@0.29.0
+      with:
+        # Scan type to use for scanning vulnerability
+        scan-type: image
+        # exit code when vulnerabilities were found
+        exit-code: 1
+        # ignore unfixed vulnerabilities
+        ignore-unfixed: false
+        # output format (table, json, template)
+        format: table
+        # use an existing template for rendering output (@/contrib/gitlab.tpl, @/contrib/junit.tpl, @/contrib/html.tpl)
+        template: "@/templates/junit.tpl"   
+
+    - name: Anchore SBOM Action
+      uses: anchore/sbom-action@v0.15.11
+      with:
+        # A container image to scan
+        image: rhabereders-awesomeimage:$(date +%s)
+        # The SBOM format to export
+        format: spdx-json
+        # Upload to GitHub dependency snapshot API
+        dependency-snapshot: false
+        # Upload artifact to workflow
+        upload-artifact: true
+        # Retention policy for uploaded artifact to workflow.
+        # Minimum 1 day. Maximum 90 days unless changed from the repository settings page. An input of 0 assumes default retention value.
+        upload-artifact-retention: 0
+        # Upload release assets
+        upload-release-assets: false            
+
+    
+          
