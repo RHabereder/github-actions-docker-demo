@@ -30,7 +30,7 @@ jobs:
       uses: aquasecurity/trivy-action@0.29.0
       with:
         # image reference(for backward compatibility)
-        image-ref: ${{ env.IMAGE_NAME }}-${{ env.GITHUB_RUN_NUMBER }}
+        image-ref: ${{ env.IMAGE_NAME }}-${{ github.run_number }}
         # Scan type to use for scanning vulnerability
         scan-type: image
         # exit code when vulnerabilities were found
@@ -46,7 +46,7 @@ jobs:
       uses: anchore/sbom-action@v0.15.11
       with:
         # A container image to scan
-        image: ${{ env.IMAGE_NAME }}-${{ env.GITHUB_RUN_NUMBER }}
+        image: ${{ env.IMAGE_NAME }}-${{ github.run_number }}
         # The SBOM format to export
         format: spdx-json
         # Upload to GitHub dependency snapshot API
