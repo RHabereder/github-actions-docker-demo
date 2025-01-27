@@ -22,7 +22,7 @@ jobs:
       uses: gitleaks/gitleaks-action@v2.3.4    
     
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag $IMAGE_NAME-$GITHUB_RUN_NUMBER
+      run: docker build . --file Dockerfile --tag ${{ env.IMAGE_NAME }}-${{ github.run_number }}
 
     - name: Aqua Security Trivy
       # You may pin to the exact commit or the version.
