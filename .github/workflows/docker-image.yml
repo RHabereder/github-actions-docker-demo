@@ -16,10 +16,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
-    - name: Run Interrupt to ask for Input
-      run: read -p "Press enter to continue"
-
     - uses: actions/checkout@v4
     
     
